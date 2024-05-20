@@ -73,7 +73,6 @@ public class UserController {
         List<Affaire> affaires = user.getAffaires();
         affaires.add(affaireUser);
         user.setAffaires(affaires);
-        System.out.println(user);
         userService.updateUser(user,id);
     }
 

@@ -3,8 +3,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rb.caisse.rbcaisse.entity.Caisse;
+import rb.caisse.rbcaisse.entity.User;
 import rb.caisse.rbcaisse.payload.response.MessageResponse;
 import rb.caisse.rbcaisse.service.CaisseService;
+import rb.caisse.rbcaisse.service.UserService;
 
 import java.util.List;
 
@@ -14,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CaisseController {
     private CaisseService caisseService;
+    private UserService userService;
     @GetMapping("/getAll")
     public List<Caisse> getAllCaisses() {
         return caisseService.getAllCaisse();
@@ -40,6 +43,10 @@ public class CaisseController {
         return  ResponseEntity.ok(new MessageResponse("Supression réussi !"));
     }
 
+    @GetMapping("/caissesByUser/{id}")
+    public List<Caisse> findCaissesByAffaireUser(@PathVariable long id){
+        User user=userService.finduserById(id);
+        return caisseService.caissesByUser(user);
 }
-
+}
 

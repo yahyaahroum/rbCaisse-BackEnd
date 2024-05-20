@@ -19,7 +19,8 @@ public class CompteComptable {
     private long id;
     private String codeComptable;
     private String intitule;
-    @JsonIgnore
-    @OneToMany(mappedBy = "compteComptable",targetEntity = CompteComptable.class)
-    private List<NatureOperation> natureOperationListe;
 }
+ /*   @JsonIgnore
+    @OneToMany(targetEntity = CompteComptable.class,mappedBy = "compteComptable")
+    private List<NatureOperation> natureOperationListe;
+}*/

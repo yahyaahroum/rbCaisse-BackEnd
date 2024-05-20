@@ -34,10 +34,8 @@ public class UserImpService implements UserService {
            if (userRepository.existsByUsername(signUpRequest.getUsername())) {
                 return null;
             }
-
             if (userRepository.existsByEmail(signUpRequest.getEmail())) {
                 return null;
-
             }
         User user = new User();
         user.setPassword(encoder.encode(signUpRequest.getPassword()));

@@ -24,6 +24,7 @@ public class DemandeAlimentation extends Auditable<String> implements Serializab
     private Date dateDemande;
     private String etat;
     private String motif;
+    private double montantDemande;
     private String pieceJointe;
     @ManyToOne
     @JoinColumn(name = "id_caisse")

@@ -1,12 +1,16 @@
 package rb.caisse.rbcaisse.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.web.bind.annotation.*;
 import rb.caisse.rbcaisse.entity.AlimentationCaisse;
 import rb.caisse.rbcaisse.entity.AlimentationCaisse;
 import rb.caisse.rbcaisse.entity.DemandeAlimentation;
+import rb.caisse.rbcaisse.entity.User;
 import rb.caisse.rbcaisse.payload.response.MessageResponse;
 import rb.caisse.rbcaisse.service.DemandeAlimentationService;
+import rb.caisse.rbcaisse.service.UserService;
 
 import java.util.List;
 
@@ -16,6 +20,7 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class DemandeAlimentationController {
     private DemandeAlimentationService demandeAlimentationService;
+    private UserService userService;
     @GetMapping("/getAll")
     public List<DemandeAlimentation> getAllDemandeAlimentationCaisses() {
         return demandeAlimentationService.getAllDemandeAlimentation();
@@ -26,8 +31,10 @@ public class DemandeAlimentationController {
         return demandeAlimentationService.getDemandeAlimentationById(id);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> register(@RequestBody DemandeAlimentation demandeAlimentation) {
+    @PostMapping("/add/{idUser}")
+    public ResponseEntity<?> register(@PathVariable long idUser,@RequestBody DemandeAlimentation demandeAlimentation) {
+        User userConnecte=userService.finduserById(idUser);
+        demandeAlimentation.setUser(userConnecte);
         demandeAlimentationService.addDemandeAlimentation(demandeAlimentation);
         return  ResponseEntity.ok(new MessageResponse("Insertion réussi !"));
     }

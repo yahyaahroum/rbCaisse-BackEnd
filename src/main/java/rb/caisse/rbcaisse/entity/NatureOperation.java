@@ -1,5 +1,6 @@
 package rb.caisse.rbcaisse.entity;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
