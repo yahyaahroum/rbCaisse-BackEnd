@@ -14,13 +14,13 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "fonction_employe")
-public class Fonction extends Auditable<String> implements Serializable {
+public class Fonction implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String libelle;
-    @JsonIgnore
+  /*  @JsonIgnore
     @OneToMany(targetEntity = Employe.class,mappedBy = "fonction")
-    private List<Employe> employeList;
+    private List<Employe> employeList;*/
 
 }

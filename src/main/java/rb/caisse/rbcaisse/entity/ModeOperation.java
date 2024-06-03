@@ -14,12 +14,13 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "mode_op")
-public class ModeOperation extends Auditable<String> implements Serializable {
+public class ModeOperation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String libelle;
-    @JsonIgnore
+/*    @JsonIgnore
     @OneToMany(targetEntity = SuiviCaisse.class,mappedBy = "modeOperation")
     private List<SuiviCaisse> suiviCaisses;
+*/
 }

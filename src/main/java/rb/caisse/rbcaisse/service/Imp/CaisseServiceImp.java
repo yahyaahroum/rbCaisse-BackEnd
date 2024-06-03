@@ -4,10 +4,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import rb.caisse.rbcaisse.entity.Affaire;
 import rb.caisse.rbcaisse.entity.Caisse;
+import rb.caisse.rbcaisse.entity.Role;
 import rb.caisse.rbcaisse.entity.User;
 import rb.caisse.rbcaisse.repository.CaisseRepository;
 import rb.caisse.rbcaisse.repository.UserRepository;
 import rb.caisse.rbcaisse.service.CaisseService;
+import rb.caisse.rbcaisse.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +18,8 @@ import java.util.List;
 @AllArgsConstructor
 public class CaisseServiceImp implements CaisseService {
     private CaisseRepository caisseRepository;
-    private UserRepository userRepository;
+    private UserService userService;
+
     @Override
     public List<Caisse> getAllCaisse() {
         return caisseRepository.findAll();
@@ -45,23 +48,16 @@ public class CaisseServiceImp implements CaisseService {
 
     @Override
     public List<Caisse> caissesByUser(User user) {
-        List<Affaire> listeAffairesUser = user.getAffaires();
-        List<Caisse> caissesUser=new ArrayList<>();
-        if(listeAffairesUser!=null){
-        boolean exist = listeAffairesUser.stream().anyMatch(
-                o -> o.getCode().equals("CH000001"));
-        if(!exist){
-            listeAffairesUser.forEach(aff->{
-                System.out.println(aff.getCode());
-                caissesUser.add(caisseRepository.findCaisseByAffaire_Code(aff.getCode()));
-                    });
-            return caissesUser;
-        }
-        else{
-            return caisseRepository.findAll();
-        }
-        }else{
-            return null;
-        }
-    }
+        String role = userService.roleUserConnected(user);
+     if(role.equals("caissier")){
+    List<Caisse> listeCaissesUser = new ArrayList<Caisse>();
+    user.getAffaires().forEach(aff->
+                    listeCaissesUser.add(aff.getCaisse()));
+    return listeCaissesUser;
+     }else{
+    return caisseRepository.findAll();
+     }
+  }
+
+
 }

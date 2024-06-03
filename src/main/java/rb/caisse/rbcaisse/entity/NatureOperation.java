@@ -15,14 +15,14 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "nature_op")
-public class NatureOperation extends Auditable<String> implements Serializable {
+public class NatureOperation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String libelle;
-    @JsonIgnore
+/*    @JsonIgnore
     @OneToMany(targetEntity = SuiviCaisse.class,mappedBy = "natureOperation")
-    private List<SuiviCaisse> suiviCaisses;
+    private List<SuiviCaisse> suiviCaisses;*/
     @ManyToOne
     @JoinColumn(name = "compte_comptable")
     private CompteComptable compteComptable;

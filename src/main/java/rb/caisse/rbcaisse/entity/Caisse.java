@@ -14,22 +14,19 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "caisse")
-public class Caisse extends Auditable<String> implements Serializable {
+public class Caisse extends Auditable implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    private String nomCaisse;
     private double soldeActuel;
-    @ManyToOne
-    @JoinColumn(name = "id_affaire")
-    private Affaire affaire;
-    @JsonIgnore
+    private String statut;
+/*    @JsonIgnore
     @OneToMany(targetEntity = SuiviCaisse.class,mappedBy = "caisse")
-    private List<SuiviCaisse> suiviCaisses;
-    @JsonIgnore
-    @OneToMany(targetEntity = DemandeAlimentation.class,mappedBy = "caisse")
-    private List<DemandeAlimentation> demandeAlimentations;
-    @JsonIgnore
+    private List<SuiviCaisse> suiviCaisses;*/
+
+  /*  @JsonIgnore
     @OneToMany(targetEntity = AlimentationCaisse.class,mappedBy = "caisse")
     private List<AlimentationCaisse> alimentationCaisseList;
-
+*/
 }

@@ -143,4 +143,23 @@ public class UserImpService implements UserService {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.matches(password, user.getPassword());
     }
+
+    @Override
+    public String roleUserConnected(User user) {
+        String roleUser="";
+        if(user.getRoles().stream().anyMatch(e -> e.getName().equals("admin"))) {
+            roleUser="admin";
+        } else if(user.getRoles().stream().anyMatch(e -> e.getName().equals("comptable"))){
+            roleUser="comptable";
+        }
+        else if(user.getRoles().stream().anyMatch(e -> e.getName().equals("consulteur"))){
+            roleUser="consulteur";
+        }
+        else {
+            roleUser="caissier";
+
+        }
+
+       return roleUser;
+    }
 }

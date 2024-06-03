@@ -4,4 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import rb.caisse.rbcaisse.entity.CompteComptable;
 
 public interface CompteComptableRepository extends JpaRepository<CompteComptable,Long> {
+    Boolean existsByCodeComptable(String code);
+    CompteComptable findAllByCodeComptable(String code);
 }

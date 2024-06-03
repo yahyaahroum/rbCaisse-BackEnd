@@ -1,5 +1,6 @@
 package rb.caisse.rbcaisse.service;
 
+import rb.caisse.rbcaisse.entity.Affaire;
 import rb.caisse.rbcaisse.entity.AlimentationCaisse;
 import rb.caisse.rbcaisse.entity.Appartement;
 
@@ -11,4 +12,5 @@ public interface AppartementService {
     Appartement addAppartement(Appartement appartement);
     Appartement updateAppartement(Appartement appartement,long id);
     void deleteAppartement(long id);
+    List<Appartement> getAllAppartementsByAffaire(Affaire affaire);
 }

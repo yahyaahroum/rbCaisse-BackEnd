@@ -1,6 +1,7 @@
 package rb.caisse.rbcaisse.service.Imp;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import rb.caisse.rbcaisse.entity.Affaire;
 import rb.caisse.rbcaisse.entity.Appartement;
 import rb.caisse.rbcaisse.repository.AppartementRepository;
 import rb.caisse.rbcaisse.service.AppartementService;
@@ -35,5 +36,10 @@ public class AppartementServiceImp implements AppartementService {
     @Override
     public void deleteAppartement(long id) {
         appartementRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Appartement> getAllAppartementsByAffaire(Affaire affaire) {
+        return appartementRepository.findAllByAffaire(affaire);
     }
 }

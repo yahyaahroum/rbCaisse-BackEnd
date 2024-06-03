@@ -12,4 +12,5 @@ public interface CaisseService {
     Caisse updateCaisse(Caisse caisse,long id);
     void deleteCaisse(long id);
     List<Caisse> caissesByUser(User user);
+
 }

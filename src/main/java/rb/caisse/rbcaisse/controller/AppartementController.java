@@ -2,6 +2,7 @@ package rb.caisse.rbcaisse.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import rb.caisse.rbcaisse.entity.Affaire;
 import rb.caisse.rbcaisse.entity.Appartement;
 import rb.caisse.rbcaisse.payload.response.MessageResponse;
 import rb.caisse.rbcaisse.service.AppartementService;
@@ -22,6 +23,10 @@ public class AppartementController {
     @GetMapping("/searchById/{id}")
     public Appartement getAppartementById(@PathVariable long id) {
         return appartementService.getAppartementById(id);
+    }
+    @PostMapping("/getAppartementsByAffaire")
+    public List<Appartement> getAppartementById(@RequestBody Affaire affaire) {
+        return appartementService.getAllAppartementsByAffaire(affaire);
     }
 
     @PostMapping("/add")

@@ -10,5 +10,6 @@ public interface AlimentationCaisseService {
     AlimentationCaisse addAlimentationCaisse(AlimentationCaisse alimentationCaisse);
     AlimentationCaisse updateAlimentationCaisse(AlimentationCaisse alimentationCaisse,long id);
     void deleteAlimentationCaisse(long id);
+    void statutAlimentationCaisse(long id,String statut);
 
 }

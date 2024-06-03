@@ -27,6 +27,8 @@ public interface UserService {
     public void updatePassword(long id,String newPassword);
     public boolean isValidPassword(long id,String password);
 
+    public String roleUserConnected(User user);
+
 
 
 

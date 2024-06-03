@@ -1,57 +1,32 @@
 package rb.caisse.rbcaisse.controller;
-
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import rb.caisse.rbcaisse.entity.SuiviCaisse;
-import rb.caisse.rbcaisse.entity.SuiviCaisse;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+import rb.caisse.rbcaisse.entity.PJAlimentationCaisse;
+import rb.caisse.rbcaisse.entity.FileInfo;
 import rb.caisse.rbcaisse.message.ResponseMessage;
-import rb.caisse.rbcaisse.payload.response.MessageResponse;
 import rb.caisse.rbcaisse.service.FilesStorageService;
-import rb.caisse.rbcaisse.service.SuiviCaisseService;
-
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/suivicaisse")
-@AllArgsConstructor
 @CrossOrigin(origins = "*", maxAge = 3600)
-public class SuiviCaisseController {
-    private SuiviCaisseService suiviCaisseService;
+@RequestMapping("/api/Files")
+public class FilesController {
+
+    @Autowired
     private FilesStorageService storageService;
-    @GetMapping("/getAll")
-    public List<SuiviCaisse> getAllSuiviCaisses() {
-        return suiviCaisseService.getAllSuiviCaisse();
-    }
 
-    @GetMapping("/searchById/{id}")
-    public SuiviCaisse getSuiviCaisseById(@PathVariable long id) {
-        return suiviCaisseService.getSuiviCaisseById(id);
-    }
-
-    @PostMapping("/add")
-    public SuiviCaisse register(@RequestBody SuiviCaisse SuiviCaisse) {
-        return suiviCaisseService.addSuiviCaisse(SuiviCaisse);
-    }
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody SuiviCaisse SuiviCaisse){
-        suiviCaisseService.updateSuiviCaisse(SuiviCaisse,id);
-        return  ResponseEntity.ok(new MessageResponse("Modification réussi !"));
-    }
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> delete(@PathVariable long id) {
-        suiviCaisseService.deleteSuiviCaisse(id);
-        return  ResponseEntity.ok(new MessageResponse("Supression réussi !"));
-    }
-    @PostMapping("savePjSuiviCaisseById/{id}")
-    ResponseEntity<ResponseMessage> savePjSuiviCaisse(@PathVariable("id") long id,
-                                                       @RequestParam("file") MultipartFile file) {
+    @PostMapping("/upload")
+    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
         String message = "";
         try {
-            storageService.savePjSuiviCaisseById(id,file);
+            storageService.save(file);
             message = "Le fichier a été téléchargé avec succès: " + file.getOriginalFilename();
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } catch (Exception e) {
@@ -59,11 +34,32 @@ public class SuiviCaisseController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
         }
     }
+
+    @GetMapping("/files")
+    public ResponseEntity<List<FileInfo>> getListFiles() {
+        List<FileInfo> fileInfos = storageService.loadAll().map(path -> {
+            String filename = path.getFileName().toString();
+            String url = MvcUriComponentsBuilder
+                    .fromMethodName(FilesController.class, "getFile", path.getFileName().toString()).build().toString();
+
+            return new FileInfo(filename, url);
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
+    }
+
+    @GetMapping("/files/{filename:.+}")
+    public ResponseEntity<Resource> getFile(@PathVariable String filename) {
+        Resource file = storageService.load(filename);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    }
+
     @DeleteMapping("/deleteFiles/{filename}")
-    public ResponseEntity<ResponseMessage> deleteFileSuiviCaisse(@PathVariable String filename) {
+    public ResponseEntity<ResponseMessage> deleteFile(@PathVariable String filename) {
         String message = "";
         try {
-            boolean existed = storageService.deletePJSuiviCaisse(filename);
+            boolean existed = storageService.delete(filename);
 
             if (existed) {
                 message = "Fichier supprimé aves succés: " + filename;
@@ -77,11 +73,19 @@ public class SuiviCaisseController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage(message));
         }
     }
-    @PostMapping("/upload")
-    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
+    @GetMapping("/filesByAlimentation/{id}")
+    public List<PJAlimentationCaisse> getFilesByAlimentation(@PathVariable("id") String id) {
+        if(!id.equals("undefined"))
+            return storageService.allFilesByAlimentation(Long.parseLong(id));
+        else
+            return null;
+    }
+    @PostMapping("savePjAlimentationById/{id}")
+    ResponseEntity<ResponseMessage> savePjAlimentation(@PathVariable("id") long id,
+                                             @RequestParam("file") MultipartFile file) {
         String message = "";
         try {
-            storageService.save(file);
+            storageService.savePjAlimentationById(id,file);
             message = "Le fichier a été téléchargé avec succès: " + file.getOriginalFilename();
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } catch (Exception e) {
@@ -90,5 +94,3 @@ public class SuiviCaisseController {
         }
     }
 }
-
-

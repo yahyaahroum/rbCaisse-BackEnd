@@ -21,7 +21,7 @@ import java.util.Set;
                 @UniqueConstraint(columnNames = "compteurEau"),
                 @UniqueConstraint(columnNames = "compteurElectricite")
         })
-public class Appartement extends Auditable<String> implements Serializable {
+public class Appartement implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -30,18 +30,13 @@ public class Appartement extends Auditable<String> implements Serializable {
     private String compteurEau;
     private String compteurElectricite;
     @ManyToOne
-    @JoinColumn(name = "id_ville")
-    private  Ville ville;
-    @ManyToMany
-    @JoinTable(name = "Appartement_Affaire",
-    joinColumns = @JoinColumn(name="appatement_id"),
-    inverseJoinColumns = @JoinColumn(name = "affaire_id"))
-    private List<Affaire> courses = new ArrayList<>();
-    @JsonIgnore
+    @JoinColumn(name = "id_affaire")
+    private Affaire affaire;
+/*    @JsonIgnore
     @OneToMany(targetEntity = Paiement_elec_eau.class,mappedBy = "appartement")
     private List<Paiement_elec_eau> paiement_elec_eauList;
     @JsonIgnore
     @OneToMany(targetEntity = PaiementLoye.class,mappedBy = "appartement")
-    private List<PaiementLoye> paiementLoyeList;
+    private List<PaiementLoye> paiementLoyeList;*/
 
 }

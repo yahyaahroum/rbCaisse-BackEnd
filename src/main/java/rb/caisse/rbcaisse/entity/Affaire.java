@@ -17,7 +17,7 @@ import java.util.List;
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "code")
         })
-public class Affaire extends Auditable<String> implements Serializable{
+public class Affaire implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -25,9 +25,12 @@ public class Affaire extends Auditable<String> implements Serializable{
     private String code;
     private String libelle;
     private String statut;
-   @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "id_caisse")
+    private Caisse caisse;
+/*   @JsonIgnore
    @OneToMany(targetEntity = Caisse.class,mappedBy = "affaire")
-    private List<Caisse> caisseList;
+    private List<Caisse> caisseList;*/
 
 
 
